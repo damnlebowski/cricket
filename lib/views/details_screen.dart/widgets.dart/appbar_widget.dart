@@ -1,4 +1,3 @@
-
 import 'package:cricket/models/cricket/cricket.dart';
 import 'package:cricket/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,38 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String team1Logo = cricket.response.teams![0].teamId == winnerTeamId
+        ? cricket.response.teams![0].logoUrl!
+        : cricket.response.teams![1].logoUrl!;
+    final String team1ShortName =
+        cricket.response.teams![0].teamId == winnerTeamId
+            ? cricket.response.teams![0].shortName!
+            : cricket.response.teams![1].shortName!;
+    final String team1Runs =
+        cricket.response.innings![0].battingTeamId == winnerTeamId
+            ? cricket.response.innings![0].runs!.toString()
+            : cricket.response.innings![1].runs!.toString();
+    final String team1Overs =
+        cricket.response.innings![0].battingTeamId == winnerTeamId
+            ? cricket.response.innings![0].overs!.toString()
+            : cricket.response.innings![1].overs!.toString();
+
+    final String team2Logo = cricket.response.teams![0].teamId != winnerTeamId
+        ? cricket.response.teams![0].logoUrl!
+        : cricket.response.teams![1].logoUrl!;
+    final String team2ShortName =
+        cricket.response.teams![0].teamId != winnerTeamId
+            ? cricket.response.teams![0].shortName!
+            : cricket.response.teams![1].shortName!;
+    final String team2Runs =
+        cricket.response.innings![0].battingTeamId != winnerTeamId
+            ? cricket.response.innings![0].runs!.toString()
+            : cricket.response.innings![1].runs!.toString();
+    final String team2Overs =
+        cricket.response.innings![0].battingTeamId != winnerTeamId
+            ? cricket.response.innings![0].overs!.toString()
+            : cricket.response.innings![1].overs!.toString();
+
     return Container(
       decoration: const BoxDecoration(
           color: darkBlue,
@@ -110,24 +141,21 @@ class AppBarWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(
-                    cricket.response.teams![0].teamId == winnerTeamId
-                        ? cricket.response.teams![0].logoUrl!
-                        : cricket.response.teams![1].logoUrl!),
+                backgroundImage: NetworkImage(team1Logo),
                 radius: 25,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    cricket.response.teams![0].shortName!,
+                    team1ShortName,
                     style: const TextStyle(color: Colors.white),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    '${cricket.response.innings![1].runs}(${cricket.response.innings![1].overs})',
+                    '$team1Runs($team1Overs)',
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   )
                 ],
@@ -136,22 +164,19 @@ class AppBarWidget extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(cricket.response.teams![1].shortName!,
+                  Text(team2ShortName,
                       style: const TextStyle(color: Colors.white)),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    '${cricket.response.innings![0].runs}(${cricket.response.innings![0].overs})',
+                    '$team2Runs($team2Overs)',
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   )
                 ],
               ),
               CircleAvatar(
-                backgroundImage: NetworkImage(
-                    cricket.response.teams![0].teamId != winnerTeamId
-                        ? cricket.response.teams![0].logoUrl!
-                        : cricket.response.teams![1].logoUrl!),
+                backgroundImage: NetworkImage(team2Logo),
                 radius: 25,
               ),
             ],
@@ -192,14 +217,16 @@ class AppBarWidget extends StatelessWidget {
               style: const TextStyle(color: Colors.grey, fontSize: 16),
             ),
             const Spacer(),
-            const BallWidget(text: '1', color: Colors.white, backgroundColor: null),
+            const BallWidget(
+                text: '1', color: Colors.white, backgroundColor: null),
             const BallWidget(
                 text: '4', color: Colors.black, backgroundColor: Colors.white),
             const BallWidget(
                 text: 'W', color: Colors.white, backgroundColor: Colors.black),
             const BallWidget(
                 text: '6', color: Colors.black, backgroundColor: Colors.white),
-            const BallWidget(text: 'LB', color: Colors.white, backgroundColor: null),
+            const BallWidget(
+                text: 'LB', color: Colors.white, backgroundColor: null),
             const BallWidget(text: '', color: null, backgroundColor: null),
             const SizedBox(
               width: 10,
